@@ -12,7 +12,7 @@ A smart expense settlement application that optimizes group expenses by minimizi
 
 ## Tech Stack
 
-- React + TypeScript
+- React + JavaScript
 - Vite for fast development
 - React Flow for graph visualization
 - Tailwind CSS for styling
