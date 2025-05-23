@@ -2,51 +2,30 @@ import React, { useState, useCallback } from 'react';
 import ReactFlow, {
   Background,
   Controls,
-  Node,
-  Edge,
-  Position,
   MarkerType,
-  EdgeTypes,
-  SmoothStepEdge,
-  EdgeProps,
   getBezierPath,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
 
-interface Person {
-  id: string;
-  name: string;
-  balance: number;
-}
-
-interface Transaction {
-  id: string;
-  from: string;
-  to: string;
-  amount: number;
-}
-
-// Binary Heap implementation from original repo
+// Binary Heap implementation
 class BinaryHeap {
-  private heap: [number, number][];
-
   constructor() {
     this.heap = [];
   }
 
-  insert(value: [number, number]) {
+  insert(value) {
     this.heap.push(value);
     this.bubbleUp(this.heap.length - 1);
   }
 
-  extractMax(): [number, number] {
+  extractMax() {
     if (this.heap.length === 0) {
       throw new Error("Heap is empty");
     }
 
     const max = this.heap[0];
-    const last = this.heap.pop()!;
+    const last = this.heap.pop();
 
     if (this.heap.length > 0) {
       this.heap[0] = last;
@@ -56,11 +35,11 @@ class BinaryHeap {
     return max;
   }
 
-  empty(): boolean {
+  empty() {
     return this.heap.length === 0;
   }
 
-  private bubbleUp(index: number) {
+  bubbleUp(index) {
     const element = this.heap[index];
     while (index > 0) {
       const parentIndex = Math.floor((index - 1) / 2);
@@ -71,16 +50,16 @@ class BinaryHeap {
     this.heap[index] = element;
   }
 
-  private bubbleDown(index: number) {
+  bubbleDown(index) {
     const element = this.heap[index];
     const length = this.heap.length;
 
     while (true) {
       const leftChildIndex = 2 * index + 1;
       const rightChildIndex = 2 * index + 2;
-      let leftChild: [number, number] | undefined;
-      let rightChild: [number, number] | undefined;
-      let swap: number | null = null;
+      let leftChild;
+      let rightChild;
+      let swap = null;
 
       if (leftChildIndex < length) {
         leftChild = this.heap[leftChildIndex];
@@ -93,7 +72,7 @@ class BinaryHeap {
         rightChild = this.heap[rightChildIndex];
         if (
           (swap === null && rightChild[0] > element[0]) ||
-          (swap !== null && rightChild[0] > leftChild![0])
+          (swap !== null && rightChild[0] > leftChild[0])
         ) {
           swap = rightChildIndex;
         }
@@ -110,7 +89,7 @@ class BinaryHeap {
 }
 
 // Custom edge label component
-const CustomEdgeLabel = ({ label }: { label: string }) => (
+const CustomEdgeLabel = ({ label }) => (
   <div
     style={{
       background: 'white',
@@ -138,7 +117,7 @@ const CustomEdge = ({
   style = {},
   markerEnd,
   label,
-}: EdgeProps) => {
+}) => {
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
@@ -172,7 +151,7 @@ const CustomEdge = ({
 };
 
 // Custom edge types
-const edgeTypes: EdgeTypes = {
+const edgeTypes = {
   default: CustomEdge,
 };
 
@@ -184,7 +163,7 @@ const defaultEdgeStyle = {
 
 // Default marker style
 const defaultMarkerStyle = {
-  type: MarkerType.ArrowClosed as const,
+  type: MarkerType.ArrowClosed,
   width: 20,
   height: 20,
   color: '#2D3748',
@@ -192,10 +171,10 @@ const defaultMarkerStyle = {
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
-  const [people, setPeople] = useState<Person[]>([]);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+  const [people, setPeople] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [isSolved, setIsSolved] = useState(false);
 
   const generateRandomProblem = useCallback(() => {
@@ -203,8 +182,8 @@ function App() {
     
     // Generate random number of people (2-9)
     const numPeople = Math.floor(Math.random() * 8) + 2;
-    const newPeople: Person[] = [];
-    const newTransactions: Transaction[] = [];
+    const newPeople = [];
+    const newTransactions = [];
     
     // Create people
     for (let i = 0; i < numPeople; i++) {
@@ -215,7 +194,7 @@ function App() {
       });
     }
     
-    // Generate random transactions (exactly like original repo)
+    // Generate random transactions
     for (let i = 0; i < numPeople; i++) {
       for (let j = i + 1; j < numPeople; j++) {
         if (Math.random() > 0.5) {
@@ -250,7 +229,7 @@ function App() {
     });
 
     // Create nodes for the graph
-    const newNodes: Node[] = updatedPeople.map((person, index) => ({
+    const newNodes = updatedPeople.map((person, index) => ({
       id: person.id,
       data: { 
         label: `${person.name}\n(${person.balance > 0 ? '+' : ''}${person.balance})`,
@@ -270,7 +249,7 @@ function App() {
     }));
 
     // Create edges for the graph with arrow style
-    const newEdges: Edge[] = newTransactions.map(trans => ({
+    const newEdges = newTransactions.map(trans => ({
       id: trans.id,
       source: trans.from,
       target: trans.to,
@@ -292,7 +271,7 @@ function App() {
   const handleSolveProblem = useCallback(() => {
     setIsLoading(true);
     
-    // Create arrays for balances (exactly like original repo)
+    // Create arrays for balances
     const vals = Array(people.length).fill(0);
     
     // Calculate net balance of each person
@@ -314,7 +293,7 @@ function App() {
       }
     });
 
-    const newTransactions: Transaction[] = [];
+    const newTransactions = [];
 
     // Match positive and negative balances using heaps
     while (!posHeap.empty() && !negHeap.empty()) {
@@ -341,7 +320,7 @@ function App() {
     }
 
     // Create new edges for the solved transactions with arrow style
-    const newEdges: Edge[] = newTransactions.map(trans => ({
+    const newEdges = newTransactions.map(trans => ({
       id: trans.id,
       source: trans.from,
       target: trans.to,
@@ -353,7 +332,7 @@ function App() {
     }));
 
     // Update nodes to show final balances (all should be 0)
-    const newNodes: Node[] = people.map((person, index) => ({
+    const newNodes = people.map((person, index) => ({
       id: person.id,
       data: { 
         label: `${person.name}\n(0)`,
@@ -400,15 +379,13 @@ function App() {
       return { ...person, balance };
     });
 
-    // Calculate final balances (should all be 0)
-    const finalBalances = people.map(person => {
-      const balance = transactions.reduce((acc, trans) => {
-        if (trans.from === person.id) return acc - trans.amount;
-        if (trans.to === person.id) return acc + trans.amount;
-        return acc;
-      }, 0);
-      return { ...person, balance };
-    });
+    // Count original transactions (before optimization)
+    const originalTransactionCount = originalBalances.reduce((count, person) => {
+      if (person.balance !== 0) {
+        return count + 1;
+      }
+      return count;
+    }, 0);
 
     return (
       <div className="solution-summary">
@@ -466,7 +443,7 @@ function App() {
         <div className="summary-stats">
           <div className="stat-item">
             <span className="stat-label">Original Transactions:</span>
-            <span className="stat-value">{transactions.length}</span>
+            <span className="stat-value">{originalTransactionCount}</span>
           </div>
           <div className="stat-item">
             <span className="stat-label">Optimized Transactions:</span>
@@ -474,7 +451,7 @@ function App() {
           </div>
           <div className="stat-item">
             <span className="stat-label">Reduction:</span>
-            <span className="stat-value">{Math.round((1 - edges.length / transactions.length) * 100)}%</span>
+            <span className="stat-value">{Math.round((1 - edges.length / originalTransactionCount) * 100)}%</span>
           </div>
         </div>
       </div>
@@ -540,4 +517,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 
