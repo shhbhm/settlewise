@@ -22,7 +22,7 @@ A smart expense settlement application that optimizes group expenses by minimizi
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/settlewise.git
+git clone https://github.com/shhbhm/settlewise.git
 cd settlewise
 ```
 
