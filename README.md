@@ -1,4 +1,3 @@
-![Screenshot 2025-06-06 214636](https://github.com/user-attachments/assets/d05fb0ee-207f-45de-b396-eb640819f060)# SettleWise
 
 A smart expense settlement application that optimizes group expenses by minimizing the number of transactions needed to settle debts between people.
 
