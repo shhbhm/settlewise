@@ -8,7 +8,7 @@ A smart expense settlement application that optimizes group expenses by minimizi
 - Real-time balance tracking
 - Beautiful and intuitive UI
 - Responsive design
-- 
+  
 ![Screenshot 2025-06-06 214601](https://github.com/user-attachments/assets/70d91c35-70b3-46be-8c0f-3b1456ce1ac1)
 
 ![Screenshot 2025-06-06 214636](https://github.com/user-attachments/assets/d872334e-f4b7-4a60-af27-95654dc33a20)
