@@ -1,5 +1,6 @@
 **SETTLE WISE:**
 A smart expense settlement application that optimizes group expenses by minimizing the number of transactions needed to settle debts between people.
+A heap data structure, specifically a min-heap or max-heap, is  used in SettleWise to optimize the process of calculating and settling debts efficiently.
 
 ## Features
 
