@@ -1,4 +1,4 @@
-SETTLE WISE:
+**SETTLE WISE:**
 A smart expense settlement application that optimizes group expenses by minimizing the number of transactions needed to settle debts between people.
 
 ## Features
